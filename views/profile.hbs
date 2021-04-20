@@ -1,0 +1,6 @@
+<h1>Welcome {{user.username}}</h1>
+<a class="nav-link" href="/auth/logout">Logout</a>
+
+{{#if isAdmin }}
+  <a class="nav-link" href="/private/admin-page">Admin page</a>
+{{/if}}
