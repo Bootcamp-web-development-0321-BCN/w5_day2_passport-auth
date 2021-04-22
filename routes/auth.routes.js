@@ -3,10 +3,12 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User.model');
 const { isLoggedOut } = require('../middlewares');
+const transporter = require('../configs/nodemailer.config');
+const mailTemplate = require('../templates/mail.template');
 const router = express.Router();
 const saltRounds = 10;
 
-router.get('/signup', isLoggedOut,(req, res) => {
+router.get('/signup', isLoggedOut, (req, res) => {
   res.render('signup');
 })
 
@@ -20,7 +22,7 @@ router.post('/signup', (req, res) => {
   // const regularExpresion = new RegExp('');
   // regularExpresion.test(password)
 
-  if(password.length < 3){
+  if (password.length < 3) {
     res.render('signup', { errorMessage: 'Password should have at least 3 characters' })
   }
 
@@ -37,10 +39,24 @@ router.post('/signup', (req, res) => {
         .then((newUser) => {
           // return res.redirect('/');
           req.login(newUser, (error) => {
-            if(error){
+            if (error) {
               next(error)
             }
-            return res.redirect('/private/profile')
+            transporter.sendMail({
+              from: "Contacto web <ironhacknodemailer@gmail.com>",
+              to: "diego.mendez@tailor-hub.com", // email from signup form
+              subject: "Bienvenido a mi aplicación",
+              text: "Bienvenido",
+              html: mailTemplate(username),
+            })
+              .then(() => {
+                return res.redirect('/private/profile')
+              })
+              .catch(error => {
+                console.log(error);
+                return res.redirect('/private/profile');
+              })
+
           })
         })
         .catch((error) => {
@@ -52,7 +68,7 @@ router.post('/signup', (req, res) => {
     })
 });
 
-router.get('/login', isLoggedOut,(req, res) => {
+router.get('/login', isLoggedOut, (req, res) => {
   res.render('login');
 })
 
