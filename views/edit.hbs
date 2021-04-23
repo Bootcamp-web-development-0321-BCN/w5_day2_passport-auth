@@ -1,0 +1,24 @@
+<h1>Edit profile</h1>
+
+<form method="POST" action="/private/edit" enctype="multipart/form-data">
+  <div class="mb-3 needs-validation">
+    <label for="exampleInputEmail1" class="form-label">Username</label>
+    <input value={{user.username}} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username" required>
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+
+  <div class="mb-3 needs-validation">
+    <label for="exampleInputEmail1" class="form-label">Foto de perfil</label>
+    <input type="file" class="form-control" id="exampleInputProfile1" aria-describedby="profile-image" name="image" required>
+    <div id="profileHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">Edit</button>
+</form>
+
+{{#if errorMessage}}
+  <div>
+   <p class="error-message"> {{ errorMessage }}</p>
+  </div>
+{{/if}}
